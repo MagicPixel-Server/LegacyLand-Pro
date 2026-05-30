@@ -43,7 +43,7 @@ public class DiplomacyOverviewForm extends GuiForm {
         Collection<Nation> allNations = TownyAPI.getInstance().getNations();
         List<String> nationNames = new ArrayList<>();
         for (Nation n : allNations) {
-            if (!n.getName().equals(myNationName)) {
+            if (myNationName == null || !n.getName().equals(myNationName)) {
                 nationNames.add(n.getName());
             }
         }
@@ -51,12 +51,14 @@ public class DiplomacyOverviewForm extends GuiForm {
         DiplomacyManager diplomacy = DiplomacyManager.getInstance();
         GuaranteeManager guarantee = GuaranteeManager.getInstance();
 
+        List<DiplomacyRelation> myRelations = myNationName != null
+                ? diplomacy.getNationRelations(myNationName)
+                : new ArrayList<>();
+
         ListElement<String> list = new ListElement<>("nation_list", "国家列表", nationNames);
 
         list.nameMapper(nationName -> {
-            if (myNationName == null) return "§7" + nationName;
-            RelationType rel = diplomacy.getRelation(myNationName, nationName);
-            return colorPrefix(rel) + nationName;
+            return nationName;
         });
 
         list.materialMapper(nationName -> {
@@ -68,28 +70,27 @@ public class DiplomacyOverviewForm extends GuiForm {
         list.loreMapper(nationName -> {
             List<String> lore = new ArrayList<>();
             if (myNationName == null) {
-                lore.add("§7你不在任何国家中");
+                lore.add("你不在任何国家中");
                 return lore;
             }
             RelationType rel = diplomacy.getRelation(myNationName, nationName);
-            lore.add("§7关系: " + colorPrefix(rel) + rel.getDisplayName());
+            lore.add("关系: " + rel.getDisplayName());
 
             // 建立时间
-            List<DiplomacyRelation> relations = diplomacy.getNationRelations(myNationName);
-            for (DiplomacyRelation r : relations) {
+            for (DiplomacyRelation r : myRelations) {
                 if (r.involves(nationName)) {
-                    lore.add("§8建立于 " + DATE_FMT.format(Instant.ofEpochMilli(r.getEstablishedTime())));
+                    lore.add("建立于 " + DATE_FMT.format(Instant.ofEpochMilli(r.getEstablishedTime())));
                     break;
                 }
             }
 
             // 保护担保
             if (guarantee.hasGuarantee(nationName, myNationName)) {
-                lore.add("§b受其保护担保");
+                lore.add("受其保护担保");
             }
 
             lore.add("");
-            lore.add("§e点击查看操作");
+            lore.add("点击查看操作");
             return lore;
         });
 
@@ -98,19 +99,6 @@ public class DiplomacyOverviewForm extends GuiForm {
         });
 
         addElement(list);
-    }
-
-    private String colorPrefix(RelationType rel) {
-        return switch (rel) {
-            case WAR -> "§c";
-            case HOSTILE -> "§6";
-            case NEUTRAL -> "§7";
-            case FRIENDLY -> "§a";
-            case ALLIANCE_DEFENSIVE -> "§9";
-            case ALLIANCE_OFFENSIVE -> "§5";
-            case TRADE_AGREEMENT -> "§e";
-            case TECH_AGREEMENT -> "§b";
-        };
     }
 
     private Material materialFor(RelationType rel) {
