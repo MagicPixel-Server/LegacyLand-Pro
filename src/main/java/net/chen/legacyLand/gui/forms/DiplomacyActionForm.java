@@ -78,7 +78,11 @@ public class DiplomacyActionForm extends GuiForm {
                 hasDeclareWar && myNationName != null && current != RelationType.WAR,
                 !hasDeclareWar ? "§c无宣战权限" : current == RelationType.WAR ? "§c已处于战争状态" : null,
                 p -> {
-                    diplomacy.declareWar(myNationName, targetNation);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!diplomacy.declareWar(myNationName, targetNation)) {
+                        p.sendMessage("§c宣战失败！");
+                        return;
+                    }
                     p.sendMessage("§c已向 " + targetNation + " 宣战！");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
@@ -90,7 +94,11 @@ public class DiplomacyActionForm extends GuiForm {
                 hasDeclareWar && myNationName != null && current == RelationType.WAR,
                 !hasDeclareWar ? "§c无求和权限" : current != RelationType.WAR ? "§c当前未处于战争状态" : null,
                 p -> {
-                    diplomacy.makePeace(myNationName, targetNation);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!diplomacy.makePeace(myNationName, targetNation)) {
+                        p.sendMessage("§c求和失败！");
+                        return;
+                    }
                     p.sendMessage("§a已与 " + targetNation + " 和平！");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
@@ -102,7 +110,11 @@ public class DiplomacyActionForm extends GuiForm {
                 hasFormAlliance && myNationName != null && !current.isAlliance() && current != RelationType.WAR,
                 !hasFormAlliance ? "§c无结盟权限" : current.isAlliance() ? "§c已存在同盟关系" : current == RelationType.WAR ? "§c战争中无法结盟" : null,
                 p -> {
-                    diplomacy.formAlliance(myNationName, targetNation, true);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!diplomacy.formAlliance(myNationName, targetNation, true)) {
+                        p.sendMessage("§c结盟失败！");
+                        return;
+                    }
                     p.sendMessage("§9已与 " + targetNation + " 建立共同防御同盟！");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
@@ -114,7 +126,11 @@ public class DiplomacyActionForm extends GuiForm {
                 hasFormAlliance && myNationName != null && !current.isAlliance() && current != RelationType.WAR,
                 !hasFormAlliance ? "§c无结盟权限" : current.isAlliance() ? "§c已存在同盟关系" : current == RelationType.WAR ? "§c战争中无法结盟" : null,
                 p -> {
-                    diplomacy.formAlliance(myNationName, targetNation, false);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!diplomacy.formAlliance(myNationName, targetNation, false)) {
+                        p.sendMessage("§c结盟失败！");
+                        return;
+                    }
                     p.sendMessage("§5已与 " + targetNation + " 建立共同进攻同盟！");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
@@ -126,7 +142,11 @@ public class DiplomacyActionForm extends GuiForm {
                 hasProposeDiplomacy && myNationName != null && current != RelationType.TRADE_AGREEMENT && current != RelationType.WAR,
                 !hasProposeDiplomacy ? "§c无外交提案权限" : current == RelationType.TRADE_AGREEMENT ? "§c已有贸易协议" : current == RelationType.WAR ? "§c战争中无法签订" : null,
                 p -> {
-                    diplomacy.signTradeAgreement(myNationName, targetNation);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!diplomacy.signTradeAgreement(myNationName, targetNation)) {
+                        p.sendMessage("§c签订贸易协议失败！");
+                        return;
+                    }
                     p.sendMessage("§e已与 " + targetNation + " 签订贸易协议！");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
@@ -138,7 +158,11 @@ public class DiplomacyActionForm extends GuiForm {
                 hasProposeDiplomacy && myNationName != null && current != RelationType.TECH_AGREEMENT && current != RelationType.WAR,
                 !hasProposeDiplomacy ? "§c无外交提案权限" : current == RelationType.TECH_AGREEMENT ? "§c已有科技协议" : current == RelationType.WAR ? "§c战争中无法签订" : null,
                 p -> {
-                    diplomacy.signTechAgreement(myNationName, targetNation);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!diplomacy.signTechAgreement(myNationName, targetNation)) {
+                        p.sendMessage("§c签订科技协议失败！");
+                        return;
+                    }
                     p.sendMessage("§b已与 " + targetNation + " 签订科技协议！");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
@@ -150,7 +174,11 @@ public class DiplomacyActionForm extends GuiForm {
                 hasProposeDiplomacy && myNationName != null && current != RelationType.NEUTRAL && current != RelationType.WAR,
                 !hasProposeDiplomacy ? "§c无外交提案权限" : current == RelationType.NEUTRAL ? "§c已是中立关系" : current == RelationType.WAR ? "§c战争中请先求和" : null,
                 p -> {
-                    diplomacy.removeRelation(myNationName, targetNation);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!diplomacy.removeRelation(myNationName, targetNation)) {
+                        p.sendMessage("§c操作失败！");
+                        return;
+                    }
                     p.sendMessage("§7已将与 " + targetNation + " 的关系设为中立。");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
@@ -163,7 +191,11 @@ public class DiplomacyActionForm extends GuiForm {
                 isLeader && myNationName != null && !alreadyGuaranteed,
                 !isLeader ? "§c仅领导者可操作" : alreadyGuaranteed ? "§c已提供保护担保" : null,
                 p -> {
-                    guarantee.establishGuarantee(myNationName, targetNation);
+                    if (myNationName == null) { p.sendMessage("§c你不在任何国家中！"); return; }
+                    if (!guarantee.establishGuarantee(myNationName, targetNation)) {
+                        p.sendMessage("§c建立保护担保失败！");
+                        return;
+                    }
                     p.sendMessage("§b已为 " + targetNation + " 建立保护担保！");
                     GuiManager.getInstance().openForm(p, new DiplomacyActionForm(p, targetNation));
                 });
