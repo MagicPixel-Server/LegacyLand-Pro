@@ -7,6 +7,8 @@ import net.chen.legacyLand.nation.NationPermission;
 import net.chen.legacyLand.nation.diplomacy.DiplomacyManager;
 import net.chen.legacyLand.nation.diplomacy.DiplomacyRelation;
 import net.chen.legacyLand.nation.diplomacy.RelationType;
+import net.chen.legacyLand.gui.GuiManager;
+import net.chen.legacyLand.gui.forms.DiplomacyOverviewForm;
 import net.chen.legacyLand.util.LanguageManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -62,20 +64,22 @@ public class DiplomacyCommand implements CommandExecutor, TabCompleter {
         };
     }
     private boolean handleInfo(Player player, String[] args) {
-        Nation nation;
-
-        if (args.length >= 2) {
-            nation = townyAPI.getNation(args[1]);
-            if (nation == null) {
-                player.sendMessage(LanguageManager.getInstance().translate("nation.not_found", args[1]));
-                return true;
-            }
-        } else {
-            nation = nationManager.getPlayerNation(player);
-            if (nation == null) {
+        if (args.length < 2) {
+            // 无参数：打开 GUI
+            Nation myNation = nationManager.getPlayerNation(player);
+            if (myNation == null) {
                 player.sendMessage(LanguageManager.getInstance().translate("nation.nobelongs"));
                 return true;
             }
+            GuiManager.getInstance().openForm(player, new DiplomacyOverviewForm(player));
+            return true;
+        }
+
+        // 有参数：保留原有文字输出
+        Nation nation = townyAPI.getNation(args[1]);
+        if (nation == null) {
+            player.sendMessage(LanguageManager.getInstance().translate("nation.not_found", args[1]));
+            return true;
         }
 
         player.sendMessage(LanguageManager.getInstance().translate("diplomacy.relations_header", nation.getName()));
