@@ -31,7 +31,7 @@ public class DiplomacyOverviewForm extends GuiForm {
     private final Player viewer;
 
     public DiplomacyOverviewForm(Player viewer) {
-        super("diplomacy_overview", "§6外交关系总览", 6);
+        super("diplomacy_overview", "外交关系总览", 6);
         this.viewer = viewer;
     }
 
