@@ -66,11 +66,6 @@ public class DiplomacyCommand implements CommandExecutor, TabCompleter {
     private boolean handleInfo(Player player, String[] args) {
         if (args.length < 2) {
             // 无参数：打开 GUI
-            Nation myNation = nationManager.getPlayerNation(player);
-            if (myNation == null) {
-                player.sendMessage(LanguageManager.getInstance().translate("nation.nobelongs"));
-                return true;
-            }
             GuiManager.getInstance().openForm(player, new DiplomacyOverviewForm(player));
             return true;
         }

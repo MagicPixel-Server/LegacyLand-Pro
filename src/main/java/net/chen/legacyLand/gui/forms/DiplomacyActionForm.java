@@ -51,8 +51,10 @@ public class DiplomacyActionForm extends GuiForm {
         boolean hasDeclareWar = nationManager.hasPermission(viewer, NationPermission.DECLARE_WAR);
         boolean hasFormAlliance = nationManager.hasPermission(viewer, NationPermission.FORM_ALLIANCE);
         boolean hasProposeDiplomacy = nationManager.hasPermission(viewer, NationPermission.PROPOSE_DIPLOMACY);
-        boolean isLeader = myNationName != null &&
-                nationManager.getPlayerRole(myNationName, viewer.getUniqueId()).isLeader();
+        net.chen.legacyLand.nation.NationRole role = myNationName != null
+                ? nationManager.getPlayerRole(myNationName, viewer.getUniqueId())
+                : null;
+        boolean isLeader = role != null && role.isLeader();
 
         // slot 0: 目标国名称标签
         // LabelElement uses Adventure API — no § codes in displayName or lore
