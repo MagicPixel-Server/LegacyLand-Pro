@@ -15,6 +15,7 @@ This means:
 
 Versions before 1.0-Beta2.0 remain under MS-RL.
 ````
+# This project has been authorized for use in this team.
 ## 项目简介
 
 LegacyLand是一个基于Paper 1.21的Minecraft服务器插件，提供完整的国家系统、季节系统、玩家状态管理等功能。
