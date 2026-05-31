@@ -26,7 +26,11 @@ public class DiplomacyActionForm extends GuiForm {
     private final String targetNation;
 
     public DiplomacyActionForm(Player viewer, String targetNation) {
-        super("diplomacy_action", "外交操作: " + targetNation, 4);
+        super("diplomacy_action",
+                ("外交操作: " + targetNation).length() > 32
+                        ? ("外交操作: " + targetNation).substring(0, 32)
+                        : "外交操作: " + targetNation,
+                4);
         this.viewer = viewer;
         this.targetNation = targetNation;
     }

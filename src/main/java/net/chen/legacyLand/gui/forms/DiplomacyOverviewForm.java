@@ -57,10 +57,6 @@ public class DiplomacyOverviewForm extends GuiForm {
 
         ListElement<String> list = new ListElement<>("nation_list", "国家列表", nationNames);
 
-        list.nameMapper(nationName -> {
-            return nationName;
-        });
-
         list.materialMapper(nationName -> {
             if (myNationName == null) return Material.GRAY_CONCRETE;
             RelationType rel = diplomacy.getRelation(myNationName, nationName);
